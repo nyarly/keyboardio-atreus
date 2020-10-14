@@ -27,9 +27,7 @@
 #include "Kaleidoscope-FocusSerial.h"
 #include "Kaleidoscope-Macros.h"
 #include "Kaleidoscope-MouseKeys.h"
-#include "Kaleidoscope-OneShot.h"
 #include "Kaleidoscope-Qukeys.h"
-#include "Kaleidoscope-SpaceCadet.h"
 
 
 
@@ -38,7 +36,8 @@
 
 enum {
   MACRO_QWERTY,
-  MACRO_VERSION_INFO
+  MACRO_VERSION_INFO,
+  MACRO_NUMOUT
 };
 
 #define Key_Exclamation LSHIFT(Key_1)
@@ -51,51 +50,86 @@ enum {
 #define Key_Star LSHIFT(Key_8)
 #define Key_Plus LSHIFT(Key_Equals)
 
+#define Key_Under LSHIFT(Key_Minus)
+#define Key_DoubleQuote LSHIFT(Key_Quote)
+#define Key_LeftAngle LSHIFT(Key_Comma)
+#define Key_RightAngle LSHIFT(Key_Period)
+#define Key_Pipe LSHIFT(Key_Backslash)
+#define Key_Colon LSHIFT(Key_Semicolon)
 enum {
   QWERTY,
-  FUN,
-  UPPER
+  SYM,
+  NUM,
+  SPC,
+  MOUSE
 };
 
 /* *INDENT-OFF* */
 KEYMAPS(
   [QWERTY] = KEYMAP_STACKED
   (
-       Key_Q   ,Key_W   ,Key_E       ,Key_R         ,Key_T
-      ,Key_A   ,Key_S   ,Key_D       ,Key_F         ,Key_G
-      ,Key_Z   ,Key_X   ,Key_C       ,Key_V         ,Key_B, Key_Backtick
-      ,Key_Esc ,Key_Tab ,Key_LeftGui ,Key_LeftShift ,Key_Backspace ,Key_LeftControl
+    Key_Q,             Key_W,          Key_E,          Key_R,           Key_T,
+    Key_A,             Key_S,          Key_D,          Key_F,           Key_G,
+    Key_Z,             Key_X,          Key_C,          Key_V,           Key_B,          Key_Backtick,
+    Key_Esc,           Key_Tab,        Key_LeftShift,  Key_LeftAlt,     Key_Space,      Key_LeftControl
 
-                     ,Key_Y     ,Key_U      ,Key_I     ,Key_O      ,Key_P
-                     ,Key_H     ,Key_J      ,Key_K     ,Key_L      ,Key_Semicolon
-       ,Key_Backslash,Key_N     ,Key_M      ,Key_Comma ,Key_Period ,Key_Slash
-       ,Key_LeftAlt  ,Key_Space ,MO(FUN)    ,Key_Minus ,Key_Quote  ,Key_Enter
+      ,                  Key_Y,          Key_U,         Key_I,           Key_O,       Key_P
+      ,                  Key_H,          Key_J,         Key_K,           Key_L,       Key_Semicolon,
+      Key_Backslash,     Key_N,          Key_M,         Key_Comma,       Key_Period,  Key_Slash,
+      Key_RightControl,  Key_Backspace,  Key_RightAlt,  Key_RightShift,  Key_Quote,   Key_Enter
   ),
 
-  [FUN] = KEYMAP_STACKED
+  [SYM] = KEYMAP_STACKED
   (
-       Key_Exclamation ,Key_At           ,Key_UpArrow   ,Key_Dollar           ,Key_Percent
-      ,Key_LeftParen   ,Key_LeftArrow    ,Key_DownArrow ,Key_RightArrow       ,Key_RightParen
-      ,Key_LeftBracket ,Key_RightBracket ,Key_Hash      ,Key_LeftCurlyBracket ,Key_RightCurlyBracket ,Key_Caret
-      ,TG(UPPER)       ,Key_Insert       ,Key_LeftGui   ,Key_LeftShift        ,Key_Delete         ,Key_LeftControl
+    Key_Under,      Key_Plus,        Key_LeftCurlyBracket,  Key_RightCurlyBracket,  Key_DoubleQuote,
+    Key_Minus,      Key_Equals,      Key_LeftParen,         Key_RightParen,         Key_Quote,
+    Key_LeftAngle,  Key_RightAngle,  Key_LeftBracket,       Key_RightBracket,       Key_Pipe,         Key_Caret,
+    TG(SYM),        Key_Insert,      Key_LeftGui,           ___,                    ___,              ___
 
-                   ,Key_PageUp   ,Key_7 ,Key_8      ,Key_9 ,Key_Backspace
-                   ,Key_PageDown ,Key_4 ,Key_5      ,Key_6 ,___
-      ,Key_And     ,Key_Star     ,Key_1 ,Key_2      ,Key_3 ,Key_Plus
-      ,Key_LeftAlt ,Key_Space    ,___   ,Key_Period ,Key_0 ,Key_Equals
+      ,                         Key_Home,                    Key_PageDown,              Key_PageUp,   Key_End,         Key_Backspace
+      ,                         Key_LeftArrow,               Key_DownArrow,             Key_UpArrow,  Key_RightArrow,  ___,
+      Consumer_PlaySlashPause,  Consumer_ScanPreviousTrack,  Consumer_ScanNextTrack,
+          Consumer_Mute,        Consumer_VolumeDecrement,    Consumer_VolumeIncrement,
+      ___,                      ___,                         ___,                       Key_Period,   Key_0,           Key_Equals
    ),
 
-  [UPPER] = KEYMAP_STACKED
+  [NUM] = KEYMAP_STACKED
   (
-       Key_Insert            ,Key_Home                 ,Key_UpArrow   ,Key_End        ,Key_PageUp
-      ,Key_Delete            ,Key_LeftArrow            ,Key_DownArrow ,Key_RightArrow ,Key_PageDown
-      ,M(MACRO_VERSION_INFO) ,Consumer_VolumeIncrement ,XXX           ,XXX            ,___ ,___
-      ,MoveToLayer(QWERTY)   ,Consumer_VolumeDecrement ,___           ,___            ,___ ,___
+    Key_Insert,             Key_LeftParen,  Key_Star,     Key_And,          ___,
+    Key_Delete,             Key_Caret,      Key_Percent,  Key_Dollar,       Key_PageDown,
+    M(MACRO_VERSION_INFO),  Key_Hash,       Key_At,       Key_Exclamation,  ___,           ___,
+    TG(NUM),                ___,            ___,          ___,              ___,           ___
 
-                ,Key_UpArrow   ,Key_F7              ,Key_F8          ,Key_F9         ,Key_F10
-                ,Key_DownArrow ,Key_F4              ,Key_F5          ,Key_F6         ,Key_F11
-      ,___      ,XXX           ,Key_F1              ,Key_F2          ,Key_F3         ,Key_F12
-      ,___      ,___           ,MoveToLayer(QWERTY) ,Key_PrintScreen ,Key_ScrollLock ,Consumer_PlaySlashPause
+        ,                 Key_Colon,   Key_7,  Key_8,      Key_9,       Key_Minus
+        ,                 Key_Equals,  Key_4,  Key_5,      Key_6,       Key_Plus,
+        M(MACRO_NUMOUT),  Key_Tab,     Key_1,  Key_2,      Key_3,       Key_Star,
+        ___,              ___,         Key_0,  Key_Comma,  Key_Period,  Key_Slash
+   ),
+
+  [SPC] = KEYMAP_STACKED
+  (
+    Key_Insert,             Key_ScrollLock,  Key_PrintScreen,           Key_Insert,                  LALT(Key_Sysreq),
+    Key_Delete,             ___,             Consumer_VolumeIncrement,  Consumer_ScanPreviousTrack,  Consumer_PlaySlashPause,
+    M(MACRO_VERSION_INFO),  ___,             Consumer_VolumeDecrement,  Consumer_ScanNextTrack,      Consumer_Mute,            ___,
+    TG(SPC),                ___,             ___,                       ___,                         ___,                      ___
+
+      ,     Key_UpArrow,    Key_F7,  Key_F8,  Key_F9,  Key_F10
+      ,     Key_DownArrow,  Key_F4,  Key_F5,  Key_F6,  Key_F11,
+      ___,  XXX,            Key_F1,  Key_F2,  Key_F3,  Key_F12,
+      ___,  ___,            ___,     ___,     ___,     ___
+   ),
+
+  [MOUSE] = KEYMAP_STACKED
+  (
+   ___,         Key_mouseBtnR,  Key_mouseBtnM,  Key_mouseBtnL,  ___,
+   Key_mouseL,  Key_mouseUp,    Key_mouseDn,   Key_mouseR,      ___,
+   ___,         ___,            ___,           ___,             ___,  Key_mouseScrollUp,
+   TG(MOUSE),   ___,            ___,           ___,             ___,  Key_mouseScrollDn
+
+      ,     Key_mouseBtnL,  Key_mouseWarpNW,  Key_mouseWarpN,   Key_mouseWarpNE,  ___
+      ,     Key_mouseBtnM,  Key_mouseWarpW,   Key_mouseWarpIn,  Key_mouseWarpE,   ___,
+      ___,  Key_mouseBtnR,  Key_mouseWarpSW,  Key_mouseWarpS,   Key_mouseWarpSE,  ___,
+      ___,  ___,            ___,              ___,              ___,              Key_mouseWarpEnd
    )
 )
 /* *INDENT-ON* */
@@ -107,11 +141,13 @@ KALEIDOSCOPE_INIT_PLUGINS(
   FocusEEPROMCommand,
   FocusSettingsCommand,
   Qukeys,
-  SpaceCadet,
-  OneShot,
   Macros,
   MouseKeys
 );
+
+static void numoutMacro(uint8_t keyState) {
+  Macros.play(MACRODOWN(T(Enter), Tr(UnlockLayer(NUM))));
+}
 
 const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   switch (macroIndex) {
@@ -128,6 +164,11 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
       Macros.type(PSTR(BUILD_INFORMATION));
     }
     break;
+
+  case MACRO_NUMOUT:
+    numoutMacro(keyState);
+    break;
+
   default:
     break;
   }
@@ -136,8 +177,18 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 }
 
 void setup() {
+  QUKEYS(
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  0),   ShiftToLayer(MOUSE)),  //a
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  1),   ShiftToLayer(SPC)),    //s
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  2),   ShiftToLayer(NUM)),    //d
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  3),   ShiftToLayer(SYM)),    //f
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  8),   ShiftToLayer(SYM)),    //j
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  9),   ShiftToLayer(NUM)),    //k
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  10),  ShiftToLayer(SPC)),    //l
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  11),  ShiftToLayer(MOUSE)),  //;
+  )
+  MouseKeys.setWarpGridSize(MOUSE_WARP_GRID_3X3);
   Kaleidoscope.setup();
-  SpaceCadet.disable();
   EEPROMKeymap.setup(10);
 }
 
