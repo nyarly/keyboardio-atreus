@@ -93,6 +93,7 @@ KEYMAPS(
       ___,                      ___,                         ___,                       Key_Period,   Key_0,           Key_Equals
    ),
 
+
   [NUM] = KEYMAP_STACKED
   (
     Key_Insert,             Key_LeftParen,  Key_Star,     Key_And,          ___,
@@ -179,7 +180,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 void setup() {
   QUKEYS(
     kaleidoscope::plugin::Qukey(0,  KeyAddr(2,  5),   Key_Backtick),         //`
-    kaleidoscope::plugin::Qukey(0,  KeyAddr(2,  6),   Key_Backslash),        //\
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(2,  6),   Key_Backslash),        //\ -
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  0),   ShiftToLayer(MOUSE)),  //a
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  1),   ShiftToLayer(SPC)),    //s
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  2),   ShiftToLayer(NUM)),    //d
@@ -188,6 +189,8 @@ void setup() {
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  9),   ShiftToLayer(NUM)),    //k
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  10),  ShiftToLayer(SPC)),    //l
     kaleidoscope::plugin::Qukey(0,  KeyAddr(1,  11),  ShiftToLayer(MOUSE)),  //;
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(3,  4),  Key_LeftShift),  // space
+    kaleidoscope::plugin::Qukey(0,  KeyAddr(3,  7),  Key_RightShift),  // backspace
   )
   MouseKeys.setWarpGridSize(MOUSE_WARP_GRID_3X3);
   Kaleidoscope.setup();
